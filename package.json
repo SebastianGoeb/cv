@@ -1,19 +1,19 @@
 {
-  "name": "webcv",
+  "name": "cv",
   "version": "0.0.1",
-  "description": "A Web CV",
+  "description": "CV App",
   "main": "index.html",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/SebastianGoeb/webcv.git"
+    "url": "git+ssh://git@github.com/SebastianGoeb/cv.git"
   },
   "author": "Sebastian Goeb",
   "license": "UNLICENSED",
   "bugs": {
-    "url": "https://github.com/SebastianGoeb/webcv/issues"
+    "url": "https://github.com/SebastianGoeb/cv/issues"
   },
-  "homepage": "https://github.com/SebastianGoeb/webcv#readme"
+  "homepage": "https://github.com/SebastianGoeb/cv#readme"
 }
