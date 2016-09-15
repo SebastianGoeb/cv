@@ -17,5 +17,11 @@
   "bugs": {
     "url": "https://github.com/SebastianGoeb/cv/issues"
   },
-  "homepage": "https://github.com/SebastianGoeb/cv#readme"
+  "homepage": "https://github.com/SebastianGoeb/cv#readme",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "express-validator": "^2.20.8",
+    "util": "^0.10.3"
+  }
 }
