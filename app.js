@@ -6,11 +6,28 @@ const util = require('util')
 const express = require('express');
 const bodyParser = require('body-parser');
 const expressValidator = require('express-validator');
+const Sequelize = require('sequelize');
+
 const app = express();
 const router = express.Router();
 
+const passwords = require('./passwords.json');
+
 // Constants
 const port = process.env.PORT || 8080
+
+// Configure db access
+const sequelize = new Sequelize('cv', 'cv', passwords.cv, {
+    host: 'localhost',
+    dialect: 'mariadb'
+});
+
+const User = require('./models/user')(sequelize);
+User.create({
+    user_name: "name",
+    email: "email",
+    password_hash: "hash"
+})
 
 // Configure middlewares
 router.use((req, res, next) => {
@@ -47,13 +64,17 @@ router.route('/users')
             }
         });
 
+        // Report errors
         const errors = req.validationErrors();
         if (errors) {
             res.send('There have been validation errors: ' + util.inspect(errors), 400);
             return;
         }
 
-        res.json(req.body);
+        const user = req.body;
+
+        // TODO save user
+        res.json(user);
     });
 
 // Register routes
