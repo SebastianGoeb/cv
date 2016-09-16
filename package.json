@@ -4,9 +4,9 @@
   "description": "CV App",
   "main": "index.html",
   "scripts": {
-    "password": "node -e \"let passwords = require('./passwords.json'); console.log(passwords[process.argv[1]]);\"",
-    "db_migrate": "flyway -url=jdbc:mysql://localhost/cv -locations=filesystem:migrations -user=flyway -password=$(npm run password -s -- flyway) migrate",
-    "db_info": "flyway -url=jdbc:mysql://localhost/cv -locations=filesystem:migrations -user=flyway -password=$(npm run password -s -- flyway) info"
+    "password": "node -e \"console.log(require('./config')[process.argv[1]].password);\"",
+    "db_migrate": "flyway -url=jdbc:mysql://localhost/cv -locations=filesystem:migrations -user=flyway -password=$(npm run password -s -- migrate) migrate",
+    "db_info": "flyway -url=jdbc:mysql://localhost/cv -locations=filesystem:migrations -user=flyway -password=$(npm run password -s -- migrate) info"
   },
   "repository": {
     "type": "git",
@@ -21,7 +21,10 @@
   "dependencies": {
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
+    "express-session": "^1.14.1",
     "express-validator": "^2.20.8",
+    "grant-express": "^3.6.4",
+    "morgan": "^1.7.0",
     "mysql": "^2.11.1",
     "sequelize": "^3.24.3",
     "util": "^0.10.3"

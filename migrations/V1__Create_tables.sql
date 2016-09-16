@@ -1,7 +1,7 @@
 CREATE TABLE users (
-    PRIMARY KEY (user_name),
+    PRIMARY KEY (username),
 
-        user_name VARCHAR(255) NOT NULL,
+        username VARCHAR(255) NOT NULL,
             email VARCHAR(255) NOT NULL,
     password_hash VARCHAR(255),
 

@@ -1,3 +1,4 @@
 node_modules/
 
-passwords.json
+config.js
+secrets.txt

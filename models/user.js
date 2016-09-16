@@ -1,17 +1,20 @@
-const Sequelize = require('sequelize');
+#!/usr/bin/env node
 
-module.exports = sequelize => sequelize.define('users', {
-    user_name: {
-        type: Sequelize.STRING,
-        primaryKey: true
-    },
-    email: {
-        type: Sequelize.STRING
-    },
-    password_hash: {
-        type: Sequelize.STRING
-    },
+'use strict';
 
-}, {
-    timestamps: false
-});
+module.exports = (sequelize, DataTypes) =>
+    sequelize.define('users', {
+        username: {
+            type: DataTypes.STRING,
+            primaryKey: true
+        },
+        email: {
+            type: DataTypes.STRING
+        },
+        password_hash: {
+            type: DataTypes.STRING
+        },
+
+    }, {
+        timestamps: false
+    });
