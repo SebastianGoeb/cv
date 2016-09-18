@@ -24,7 +24,9 @@ const config = {
             options: {
                 host: 'localhost',
                 dialect: 'mysql',
-                timestamps: false
+                define: {
+                    timestamps: false
+                }
             }
         },
         grant: {
