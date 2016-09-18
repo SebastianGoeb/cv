@@ -4,17 +4,16 @@
 
 module.exports = (sequelize, DataTypes) =>
     sequelize.define('users', {
-        username: {
-            type: DataTypes.STRING,
+        user_id: {
+            type: DataTypes.BIGINT,
             primaryKey: true
         },
-        email: {
+        google_sub: {
             type: DataTypes.STRING
-        },
-        password_hash: {
-            type: DataTypes.STRING
-        },
-
+        }
     }, {
-        timestamps: false
+        indexes: [{
+            unique: true,
+            fields: ['google_sub']
+        }]
     });

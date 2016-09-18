@@ -1,9 +1,8 @@
 CREATE TABLE users (
-    PRIMARY KEY (username),
+    PRIMARY KEY (user_id),
 
-        username VARCHAR(255) NOT NULL,
-            email VARCHAR(255) NOT NULL,
-    password_hash VARCHAR(255),
+       user_id BIGINT NOT NULL AUTO_INCREMENT,
+    google_sub VARCHAR(255),
 
-    UNIQUE INDEX email_unique (email ASC)
+    UNIQUE INDEX google_sub_unique (google_sub ASC)
 );

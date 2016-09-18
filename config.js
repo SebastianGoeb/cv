@@ -23,7 +23,8 @@ const config = {
             username: 'cv',
             options: {
                 host: 'localhost',
-                dialect: 'mysql'
+                dialect: 'mysql',
+                timestamps: false
             }
         },
         grant: {
