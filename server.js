@@ -26,6 +26,7 @@ const Sequelize  = require('sequelize');
 
 // Load models
 const sequelize = new Sequelize(config.sequelize.database, config.sequelize.username, config.sequelize.password, config.sequelize.options);
+sequelize.authenticate();
 const models = _(glob.sync(__dirname + '/components/*/*.model.js'))
     .map(modelPath => sequelize.import(modelPath))
     .map(model => [model.name, model])
@@ -50,62 +51,8 @@ app.use(validator);
 
 // Configure routes
 const router = express.Router();
-router.route('/users/:userId')
-    .post((req, res) => {
-        // Validate
-        req.checkBody({
-            'username': {
-                notEmpty: true,
-                isLength: {
-                    options: [{min: 3, max: 20}],
-                },
-                isAlpha: true,
-                errorMessage: 'Invalid username'
-            },
-            'email': {
-                notEmpty: true,
-                isEmail: {
-                    errorMessage: 'Invalid email'
-                }
-            },
-            'password': {
-                notEmpty: true,
-                isLength: {
-                    options: [{min: 8}],
-                },
-                errorMessage: 'Invalid Password'
-            }
-        });
 
-        // Report errors
-        const errors = req.validationErrors();
-        if (errors) {
-            res.status(400).send('There have been validation errors: ' + util.inspect(errors));
-            return;
-        }
-
-        // Save user
-        const user = {
-            username: req.body.username,
-            email: req.body.email,
-            password_hash: 'test'
-        };
-        models.users.create(user);
-
-        // Return user
-        res.json(user);
-    })
-    .get((req, res) => {
-        res.json({
-            username: 'username',
-            email: 'example@example.com'
-        })
-    });
-
-router.route('/connected')
-    .get((req, res) => {
-        res.end(JSON.stringify(req.session.grant.response, null, 2));
-    });
+require('./components/auth/auth.router')(router, models);
 
 // Register routes
 app.use('/', router);
