@@ -2,7 +2,11 @@
 
 'use strict';
 
-module.exports = {
+const environment = process.env.NODE_ENV || 'development'
+const _           = require('lodash');
+const secrets     = require('./secrets');
+
+const config = {
     development: {
         http: {
             port: 8080
@@ -27,6 +31,7 @@ module.exports = {
                 protocol: 'http',
                 host: 'localhost:8080',
                 callback: '/connected',
+                transport: 'session',
                 state: true
             },
             google: {
@@ -35,4 +40,6 @@ module.exports = {
             }
         }
     }
-}
+};
+
+module.exports = _.merge(config, secrets)[environment];

@@ -7,7 +7,7 @@ const _ = require('lodash');
 
 // Configuration
 const environment = process.env.NODE_ENV || 'development';
-const config      = _.merge(require('./config'), require('./secrets'))[environment];
+const config      = require('./config');
 
 // External dependencies
 const util       = require('util')
@@ -89,19 +89,21 @@ router.route('/users/:userId')
 
 router.route('/connected')
     .get((req, res) => {
-        console.log(req.query)
-        res.end(JSON.stringify(req.query, null, 2))
+        res.end(JSON.stringify(req.session.grant.response, null, 2));
     });
 
 // Register routes
 app.use('/', router);
 
+// Serve static files
+app.use(express.static('static'));
+
 // Start server(s)
 if (config.http) {
     http.createServer(app).listen(config.http.port);
-    console.log('HTTP  server listening on port', config.http.port);
+    console.log('HTTP   server listening on port', config.http.port);
 }
 if (config.https) {
     https.createServer(config.https.options, app).listen(config.https.port);
-    console.log('HTTPS server listening on port', config.https.port);
+    console.log('HTTPS  server listening on port', config.https.port);
 }
