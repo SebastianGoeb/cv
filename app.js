@@ -2,34 +2,40 @@
 
 'use strict';
 
-const util = require('util')
-const morgan = require('morgan');
-const express = require('express');
+// Require lodash first to merge config and secrets
+const _ = require('lodash');
+
+// Configuration
+const environment = process.env.NODE_ENV || 'development';
+const config      = _.merge(require('./config'), require('./secrets'))[environment];
+
+// External dependencies
+const util       = require('util')
+const http       = require('http');
+const https      = require('https');
+const express    = require('express');
 const bodyParser = require('body-parser');
-const expressValidator = require('express-validator');
-const app = express();
-const router = express.Router();
-const config = require('./config.js');
+const morgan     = require('morgan')(config.morgan);
+const validator  = require('express-validator')(config.validator);
+const session    = require('express-session')(config.session);
+const grant      = require('grant-express')(config.grant);
 
-const session = require('express-session');
-const Grant = require('grant-express')
-const grant = new Grant(config.grant);
-
-// Constants
-const port = process.env.PORT || 8080;
-
-// Configure models
+// Application dependencies
 const models = require('./models');
 
+// Create express app
+const app = express();
+
 // Configure middlewares
-app.use(morgan('dev'));
-// app.use(session({secret: 'grant'}))
-// app.use(grant);
+app.use(morgan);
+app.use(session);
 app.use(bodyParser.json());
-app.use(expressValidator([]));
+app.use(grant);
+app.use(validator);
 
 // Configure routes
-router.route('/users')
+const router = express.Router();
+router.route('/users/:userId')
     .post((req, res) => {
         // Validate
         req.checkBody({
@@ -73,26 +79,29 @@ router.route('/users')
 
         // Return user
         res.json(user);
+    })
+    .get((req, res) => {
+        res.json({
+            username: 'username',
+            email: 'example@example.com'
+        })
     });
 
-router.route('/tokensignin')
-    .post((req, res) => {
-        // Validate
-        req.checkBody('idtoken', 'Invalid ID Token').notEmpty();
-
-        // Report errors
-        const errors = req.validationErrors();
-        if (errors) {
-            res.status(400).send('There have been validation errors: ' + util.inspect(errors));
-            return;
-        }
-
-        //
+router.route('/connected')
+    .get((req, res) => {
+        console.log(req.query)
+        res.end(JSON.stringify(req.query, null, 2))
     });
 
 // Register routes
 app.use('/', router);
 
-// Start server
-app.listen(port);
-console.log('Server listening on port', port);
+// Start server(s)
+if (config.http) {
+    http.createServer(app).listen(config.http.port);
+    console.log('HTTP  server listening on port', config.http.port);
+}
+if (config.https) {
+    https.createServer(config.https.options, app).listen(config.https.port);
+    console.log('HTTPS server listening on port', config.https.port);
+}
