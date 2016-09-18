@@ -1,12 +1,12 @@
 {
   "name": "cv",
   "version": "0.0.1",
-  "description": "CV App",
+  "description": "CV",
   "main": "index.html",
   "scripts": {
-    "password": "node -e \"console.log(require('./config')[process.argv[1]].password);\"",
-    "db_migrate": "flyway -url=jdbc:mysql://localhost/cv -locations=filesystem:migrations -user=flyway -password=$(npm run password -s -- migrate) migrate",
-    "db_info": "flyway -url=jdbc:mysql://localhost/cv -locations=filesystem:migrations -user=flyway -password=$(npm run password -s -- migrate) info"
+    "config": "node -e \"let o = require('./config'); for (let segment of process.argv[1].split('.')){ o = o[segment]; } console.log(o);\"",
+    "db_migrate": "flyway -url=jdbc:mysql://localhost/cv -locations=filesystem:migrations -user=flyway -password=$(npm run config -s -- flyway.password) migrate",
+    "db_info": "flyway -url=jdbc:mysql://localhost/cv -locations=filesystem:migrations -user=flyway -password=$(npm run config -s -- flyway.password) info"
   },
   "repository": {
     "type": "git",
