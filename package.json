@@ -25,6 +25,7 @@
     "express-validator": "^2.20.8",
     "glob": "^7.0.6",
     "grant-express": "^3.6.4",
+    "jsonwebtoken": "^7.1.9",
     "lodash": "^4.15.0",
     "morgan": "^1.7.0",
     "mysql": "^2.11.1",

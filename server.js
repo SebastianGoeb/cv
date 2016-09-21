@@ -13,7 +13,7 @@ const config      = require('./config');
 const fs         = require('fs');
 const path       = require('path');
 const glob       = require('glob');
-const util       = require('util')
+const util       = require('util');
 const http       = require('http');
 const https      = require('https');
 const express    = require('express');
@@ -26,7 +26,6 @@ const Sequelize  = require('sequelize');
 
 // Load models
 const sequelize = new Sequelize(config.sequelize.database, config.sequelize.username, config.sequelize.password, config.sequelize.options);
-sequelize.authenticate();
 const models = _(glob.sync(__dirname + '/components/*/*.model.js'))
     .map(modelPath => sequelize.import(modelPath))
     .map(model => [model.name, model])

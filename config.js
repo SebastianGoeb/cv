@@ -26,7 +26,8 @@ const config = {
                 dialect: 'mysql',
                 define: {
                     timestamps: false
-                }
+                },
+                logging: false
             }
         },
         grant: {
