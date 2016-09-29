@@ -6,7 +6,8 @@
   "scripts": {
     "config": "node -e \"let o = require('./config'); for (let segment of process.argv[1].split('.')){ o = o[segment]; } console.log(o);\"",
     "db_migrate": "flyway -url=jdbc:mysql://localhost/cv -locations=filesystem:migrations -user=flyway -password=$(npm run config -s -- flyway.password) migrate",
-    "db_info": "flyway -url=jdbc:mysql://localhost/cv -locations=filesystem:migrations -user=flyway -password=$(npm run config -s -- flyway.password) info"
+    "db_info": "flyway -url=jdbc:mysql://localhost/cv -locations=filesystem:migrations -user=flyway -password=$(npm run config -s -- flyway.password) info",
+    "test": "mocha --reporter progress **/*.spec.js"
   },
   "repository": {
     "type": "git",
@@ -31,5 +32,9 @@
     "mysql": "^2.11.1",
     "sequelize": "^3.24.3",
     "util": "^0.10.3"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.1.0"
   }
 }
