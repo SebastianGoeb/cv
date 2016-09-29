@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 const express = require('express');
 const util    = require('util');
 var _         = require("lodash");
