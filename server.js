@@ -49,12 +49,13 @@ app.use(grant);
 app.use(validator);
 
 // Configure routes
-const router = express.Router();
-
-require('./components/auth/auth.router')(router, models);
+const mainRouter = express.Router();
 
 // Register routes
-app.use('/', router);
+_(glob.sync(__dirname + '/components/*/*.router.js'))
+    .map(modelPath => require(modelPath)(models))
+    .each(({path, router}) => mainRouter.use(path, router));
+app.use('/api/v0', mainRouter);
 
 // Serve static files
 app.use(express.static('static'));

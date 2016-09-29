@@ -1,12 +1,13 @@
 #!/usr/bin/env node
 
-const jwt     = require('jsonwebtoken');
-
 'use strict';
 
-module.exports = (router, models) => {
-    router.route('/connected')
-        .get((req, res) => {
+const express = require('express');
+const jwt     = require('jsonwebtoken');
+
+module.exports = models => {
+    const router = express.Router();
+    router.get('/', (req, res) => {
             const decoded = jwt.decode(req.session.grant.response.raw.id_token);
             const google_sub = decoded.sub;
             models.users.findOrCreate({
@@ -16,4 +17,8 @@ module.exports = (router, models) => {
             });
             res.end(JSON.stringify(decoded, null, 2));
         });
+    return {
+        path: '/connected',
+        router
+    }
 };

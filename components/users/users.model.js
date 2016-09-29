@@ -8,9 +8,7 @@ module.exports = (sequelize, DataTypes) =>
             type: DataTypes.BIGINT,
             primaryKey: true
         },
-        google_sub: {
-            type: DataTypes.STRING
-        }
+        google_sub: DataTypes.STRING
     }, {
         indexes: [{
             unique: true,

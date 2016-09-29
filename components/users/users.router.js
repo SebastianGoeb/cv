@@ -1,60 +1,65 @@
 #!/usr/bin/env node
 
 const express = require('express');
+const util    = require('util');
 
 'use strict';
 
-module.exports = (router, models) => {
-    router.route('/users')
-        .post((req, res) => {
-            // Validate
-            req.checkBody({
-                'username': {
-                    notEmpty: true,
-                    isLength: {
-                        options: [{min: 3, max: 20}],
-                    },
-                    isAlpha: true,
-                    errorMessage: 'Invalid username'
-                },
-                'email': {
-                    notEmpty: true,
-                    isEmail: {
-                        errorMessage: 'Invalid email'
-                    }
-                },
-                'password': {
-                    notEmpty: true,
-                    isLength: {
-                        options: [{min: 8}],
-                    },
-                    errorMessage: 'Invalid Password'
-                }
-            });
-
-            // Report errors
-            const errors = req.validationErrors();
-            if (errors) {
-                res.status(400).send('There have been validation errors: ' + util.inspect(errors));
-                return;
+module.exports = models => {
+    const router = express.Router();
+    router.get('/:jobId', (req, res) => {
+        // Validate
+        req.checkBody({
+            'job_id': {
+                notEmpty: { errorMessage: 'Required param' },
+                isNumeric: true
             }
-
-            // Save user
-            const user = {
-                username: req.body.username,
-                email: req.body.email,
-                password_hash: 'test'
-            };
-            models.users.create(user);
-
-            // Return user
-            res.json(user);
         });
-    router.route('/users/:userId')
-        .get((req, res) => {
-            res.json({
-                username: 'username',
-                email: 'example@example.com'
-            });
-        });
+
+        // Report errors
+        const errors = req.validationErrors();
+        if (errors) {
+            res.status(400).json({ errors });
+            return;
+        }
+
+        // Find
+        models.jobs.findById(req.params.jobId)
+            .then(job => {
+                if (job !== null) {
+                    res.json({ job });
+                } else {
+                    res.status(404).end();
+                }
+            })
+            .catch(err => res.status(400).end());
+    });
+    router.get('/:user_id', (req, res) => {
+        // Validate
+        req.checkParams('user_id')
+            .notEmpty().withMessage('Required param')
+            .isNumeric();
+
+        // Report errors
+        const errors = req.validationErrors();
+        if (errors) {
+            res.status(400).json({ errors });
+            return;
+        }
+
+        // Find
+        models.users.findById(req.params.user_id)
+            .then(user => {
+                if (user !== null) {
+                    res.json({ user });
+                } else {
+                    res.status(404).end();
+                }
+            })
+            .catch(err => res.status(400).end());
+    });
+    return {
+        path: '/users',
+        router
+    }
 };
