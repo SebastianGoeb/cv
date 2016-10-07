@@ -10,5 +10,5 @@ CREATE TABLE jobs (
            from_date DATE         NOT NULL,
              to_date DATE,
 
-    CONSTRAINT user_id_foreign_key FOREIGN KEY (user_id) REFERENCES users (user_id)
+    CONSTRAINT jobs_user_id_foreign_key FOREIGN KEY (user_id) REFERENCES users (user_id)
 );
